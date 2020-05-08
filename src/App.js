@@ -10,7 +10,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      randomIndex: 1
+      randomIndex: 1,
+      background: gradient()      
     };
     
     this.getNewQuote = this.getNewQuote.bind(this);
@@ -18,7 +19,8 @@ class App extends React.Component {
 
   getNewQuote() {
     this.setState({
-      randomIndex: Math.floor(Math.random() * data.length)
+      randomIndex: Math.floor(Math.random() * data.length),
+      background: gradient()
     });
   }
 
@@ -27,24 +29,55 @@ class App extends React.Component {
     const quote = data[this.state.randomIndex].Quote;
     const author = data[this.state.randomIndex].Author;
     const twitterUrl = encodeURI('https://twitter.com/intent/tweet?hashtags=quotes&text="' + quote + '" - ' + author);
-
+    
+    //console.log(this.state.randomStyle)
+    
     return (
-      <div className="wrapper">
+      <div className="wrapper" style={{background: this.state.background}}>
         <div id="quote-box" className="quote-box">
           
-          <div className="quote">
-            <div id="text">{quote}</div>
+          <div id="quote" className="quote" >
+            <div id="text">"{quote}"</div>
+            <br/>
             <div id="author"> - {author}</div>
           </div>
 
-          <i className="fa fa-twitter"></i>
-          <a href={twitterUrl} id="tweet-quote" className="twitterLink" target="_blank" title="Tweet it!" >Tweet</a>
-          <button id="new-quote" className="btn btn-primary" onClick={this.getNewQuote}>New Quote</button>          
+          <div className="buttons">
+            
+            <a href={twitterUrl} id="tweet-quote" className="btn btn-info" target="_blank" title="Tweet it!" rel="noopener noreferrer">
+              <i className="fa fa-twitter"></i>
+            </a>
+            <button id="new-quote" className="btn btn-info" onClick={this.getNewQuote}>New Quote</button>          
+          </div>
           
         </div>
       </div>
     );
   }
+}
+
+function gradient() {
+
+  var hexValues = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e"];
+  
+  function populate(a) {
+    for ( var i = 0; i < 6; i++ ) {
+      var x = Math.round( Math.random() * 14 );
+      var y = hexValues[x];
+      a += y;
+    }
+    return a;
+  }
+  
+  var newColor1 = populate('#');
+  var newColor2 = populate('#');
+  var angle = Math.round( Math.random() * 360 );
+  
+  var gradient = "linear-gradient(" + angle + "deg, " + newColor1 + ", " + newColor2 + ")";
+
+  return gradient;
+  
+  //document.getElementById("container").style.background = gradient;
 }
 
 export default App;
